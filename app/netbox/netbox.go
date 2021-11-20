@@ -52,16 +52,6 @@ func He(token string, netboxHost string) ([]models.IPAddress, error) {
 		}
 		for _, prefix := range list.Payload.Results {
 			result = append(result, *prefix)
-
-
-			address := "99.99.66.99/30"
-
-			resource := ipam.NewIpamIPAddressesCreateParams().WithDefaults()
-			resource.Data.Address = &address
-			_, err = c.Ipam.IpamIPAddressesCreate(resource, nil)
-			if err != nil {
-				fmt.Println(err)
-			}
 		}
 		if list.Payload.Next == nil {
 			break
@@ -71,6 +61,3 @@ func He(token string, netboxHost string) ([]models.IPAddress, error) {
 	return result, nil
 
 }
-
-
-
