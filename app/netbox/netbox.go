@@ -3,37 +3,30 @@ package netbox
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/netbox-community/go-netbox/netbox/client"
 	"github.com/netbox-community/go-netbox/netbox/client/ipam"
 	"github.com/netbox-community/go-netbox/netbox/models"
+	"log"
 	"net/http"
 )
 
-type IPaddressStatus struct {
-	Prefix  string
-	VRF     string
-	Status  bool
-}
 
-func PushIPAddress(c []IPaddressStatus) {
-	for _, ip := range c {
-		if ip.Status == true {
-			fmt.Println(ip.Prefix)
-		}
-	}
-}
+func NetboxLogin(token string, netboxHost string) (c *client.NetBoxAPI){
 
-
-func He(token string, netboxHost string) ([]models.IPAddress, error) {
 	httpClient := &http.Client{
 		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
 	}
 	transport := httptransport.NewWithClient(netboxHost, client.DefaultBasePath, []string{"https"}, httpClient)
 	transport.DefaultAuthentication = httptransport.APIKeyAuth("Authorization", "header", "Token "+token)
 
-	c := client.New(transport, nil)
+	cli := client.New(transport, nil)
+
+	return cli
+}
+
+func GetIPAddesses(c *client.NetBoxAPI) ([]models.IPAddress, error) {
+
 	result := make([]models.IPAddress, 0)
 	params := ipam.NewIpamIPAddressesListParams()
 
@@ -50,6 +43,7 @@ func He(token string, netboxHost string) ([]models.IPAddress, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		for _, prefix := range list.Payload.Results {
 			result = append(result, *prefix)
 		}
@@ -59,5 +53,23 @@ func He(token string, netboxHost string) ([]models.IPAddress, error) {
 	}
 
 	return result, nil
+
+}
+
+func CreateIPAddress (c *client.NetBoxAPI, ip models.IPAddress) {
+	tagname := "Scanned"
+	tag := []*models.NestedTag{{Name: &tagname, Slug: &tagname}}
+	address := ip.Address
+
+	parameters := ipam.NewIpamIPAddressesCreateParams()
+	parameters.WithData(&models.WritableIPAddress{
+		Address: address,
+		Tags:    tag,
+	})
+
+	_, err := c.Ipam.IpamIPAddressesCreate(parameters, nil)
+	if err != nil {
+		log.Fatalf("Error creating IP Address: ", err)
+	}
 
 }

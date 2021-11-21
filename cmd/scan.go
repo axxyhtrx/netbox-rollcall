@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/dean2021/go-nmap"
+	"github.com/netbox-community/go-netbox/netbox/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"net"
@@ -61,8 +62,8 @@ var scanCmd = &cobra.Command{
 		var C Config
 		err := viper.Unmarshal(&C)
 		// array with scan results
-		var results []netbox.IPaddressStatus
-		ch := make(chan netbox.IPaddressStatus)
+		var results []models.IPAddress
+		ch := make(chan models.IPAddress)
 
 		if err != nil {
 			fmt.Println("unable to decode into struct, %v", err)
@@ -84,15 +85,19 @@ var scanCmd = &cobra.Command{
 
 		w.Wait()
 		close(ch)
-		netbox.PushIPAddress(results)
+        client := netbox.NetboxLogin(viper.GetString("netbox.netboxapitoken"), viper.GetString("netbox.netboxhost"))
+		netbox.GetIPAddesses(client)
 
-		s, err := netbox.He(viper.GetString("netbox.netboxapitoken"), viper.GetString("netbox.netboxhost"))
-		if err != nil {
-           fmt.Println(err)
+        for _, host := range results {
+        	netbox.CreateIPAddress(client, host)
 		}
-		for _, addr := range s {
-			fmt.Println(*addr.Address, *addr.Status.Value)
-		}
+//		s, err := netbox.He(viper.GetString("netbox.netboxapitoken"), viper.GetString("netbox.netboxhost"))
+//		if err != nil {
+//           fmt.Println(err)
+//		}
+//		for _, addr := range s {
+//			fmt.Println(*addr.Address, *addr.Status.Value)
+//		}
 
 	},
 
@@ -110,16 +115,18 @@ func GenerateIPs(subnet []string) []string {
 
 }
 
-func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan netbox.IPaddressStatus)  {
+func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan models.IPAddress)  {
 	defer w.Done()
+	fmt.Println("start")
 	s := strings.Split(host, "/")
-	ipaddress := netbox.IPaddressStatus {}
+	ipaddress := models.IPAddress {}
 	scan := nmap.New()
+
 	args := []string{"-sn"}
 	scan.SetArgs(args...)
 	scan.SetHosts(s[0])
-	ipaddress.Prefix = host
-	ipaddress.VRF = vrf
+	ipaddress.Address = &host
+//	ipaddress.Vrf.ID = 2
 	err := scan.Run()
 	if err != nil {
 		fmt.Println("Scan failed:", err)
@@ -136,7 +143,7 @@ func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan netbox.IPadd
 
 	for _, host := range result.Hosts {
 		if host.Status.State == "up" {
-			ipaddress.Status = true
+//			ipaddress.Status = "Active"
 		}
 	}
 	ch <- ipaddress
