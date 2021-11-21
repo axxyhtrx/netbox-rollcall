@@ -11,8 +11,7 @@ import (
 	"net/http"
 )
 
-
-func NetboxLogin(token string, netboxHost string) (c *client.NetBoxAPI){
+func NetboxLogin(token string, netboxHost string) (c *client.NetBoxAPI) {
 
 	httpClient := &http.Client{
 		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
@@ -25,7 +24,7 @@ func NetboxLogin(token string, netboxHost string) (c *client.NetBoxAPI){
 	return cli
 }
 
-func GetIPAddesses(c *client.NetBoxAPI) ([]models.IPAddress, error) {
+func GetIPAddresses(c *client.NetBoxAPI) ([]models.IPAddress, error) {
 
 	result := make([]models.IPAddress, 0)
 	params := ipam.NewIpamIPAddressesListParams()
@@ -56,7 +55,7 @@ func GetIPAddesses(c *client.NetBoxAPI) ([]models.IPAddress, error) {
 
 }
 
-func CreateIPAddress (c *client.NetBoxAPI, ip models.IPAddress) {
+func CreateIPAddress(c *client.NetBoxAPI, ip models.IPAddress) {
 	tagname := "Scanned"
 	tag := []*models.NestedTag{{Name: &tagname, Slug: &tagname}}
 	address := ip.Address

@@ -28,7 +28,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "rollcall",
 	Short: "A brief description of your application",
-	Long: `.`,
+	Long:  `.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -78,9 +78,9 @@ func initConfig() {
 	}
 	var debug = false
 	if debug {
-	fmt.Println(viper.AllSettings())
-	fmt.Println(viper.Get("config"))
-	fmt.Println(viper.GetString("netbox.netboxhost"))
-	fmt.Println(viper.GetString("netbox.netboxapiurl"))
-}
+		fmt.Println(viper.AllSettings())
+		fmt.Println(viper.Get("config"))
+		fmt.Println(viper.GetString("netbox.netboxhost"))
+		fmt.Println(viper.GetString("netbox.netboxapiurl"))
+	}
 }
