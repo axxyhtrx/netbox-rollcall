@@ -1,2 +1,3 @@
-./config.yaml
-./rollcall
+.idea
+config.yaml
+rollcall
