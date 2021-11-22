@@ -110,7 +110,6 @@ func GenerateIPs(subnet []string) []string {
 
 func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan models.IPAddress) {
 	defer w.Done()
-	fmt.Println("start")
 	s := strings.Split(host, "/")
 	ipaddress := models.IPAddress{}
 	scan := nmap.New()
@@ -120,10 +119,12 @@ func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan models.IPAdd
 	scan.SetHosts(s[0])
 	ipaddress.Address = &host
 	if vrf != "" {
-		var hostvrf models.NestedVRF
-		hostvrf.Name = &vrf
-		ipaddress.Vrf = &hostvrf
-	}
+    	var hostvrf models.NestedVRF
+	    hostvrf.Name = &vrf
+        ipaddress.Vrf = &hostvrf
+}
+
+
 	err := scan.Run()
 	if err != nil {
 		fmt.Println("Scan failed:", err)
@@ -138,6 +139,7 @@ func ScanHost(vrf string, host string, w *BoundedWaitGroup, ch chan models.IPAdd
 
 	for _, host := range result.Hosts {
 		if host.Status.State == "up" {
+			//fmt.Println(&ipaddress.Vrf)
 			ch <- ipaddress
 		}
 	}
