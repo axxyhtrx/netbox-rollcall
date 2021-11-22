@@ -1,0 +1,15 @@
+netbox:
+  netboxhost: '10.80.37.00'
+  netboxapitoken: '12014TOKENTOKENff4c'
+
+targets:
+  - vrf: ANTWERP
+    subnets:
+      - 192.168.1.1/32
+      - 20.3.4.0/24
+  - vrf: MOSCOW
+      - 192.168.2.1/32
+      - 21.3.4.0/24
+    subnets:
+
+scanthreads: 20
