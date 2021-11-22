@@ -23,9 +23,10 @@ targets:
       - 192.168.1.1/32
       - 20.3.4.0/24
   - vrf: MOSCOW
+    subnets:
       - 192.168.2.1/32
       - 21.3.4.0/24
-    subnets:
+
 
 scanthreads: 20
 
