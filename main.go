@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "rollcall/cmd"
+import "github.com/axxyhtrx/netbox-rollcall/cmd"
 
 func main() {
 	cmd.Execute()

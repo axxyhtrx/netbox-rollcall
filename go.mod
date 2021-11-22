@@ -1,8 +1,10 @@
-module rollcall
+module github.com/axxyhtrx/netbox-rollcall
 
 go 1.17
 
 require (
+	github.com/go-openapi/runtime v0.21.0
+	github.com/netbox-community/go-netbox v0.0.0-20210916100859-514a84df2fa7
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.8.1
 )
@@ -18,7 +20,6 @@ require (
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/loads v0.21.0 // indirect
-	github.com/go-openapi/runtime v0.21.0 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/strfmt v0.21.0 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
@@ -30,7 +31,6 @@ require (
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
-	github.com/netbox-community/go-netbox v0.0.0-20210916100859-514a84df2fa7 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pelletier/go-toml v1.9.3 // indirect

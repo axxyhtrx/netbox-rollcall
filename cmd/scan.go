@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"net"
-	"rollcall/app/netbox"
+    "github.com/axxyhtrx/netbox-rollcall/app/netbox"
 	"strings"
 	"sync"
 )
@@ -86,7 +86,7 @@ var scanCmd = &cobra.Command{
 		w.Wait()
 		close(ch)
 		client := netbox.NetboxLogin(viper.GetString("netbox.netboxapitoken"), viper.GetString("netbox.netboxhost"))
-		netbox.GetIPAddresses(client)
+		//netbox.GetIPAddresses(client)
 
 		for _, host := range results {
 			netbox.CreateIPAddress(client, host)

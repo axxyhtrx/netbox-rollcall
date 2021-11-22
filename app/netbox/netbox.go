@@ -29,7 +29,7 @@ func GetIPAddresses(c *client.NetBoxAPI) ([]models.IPAddress, error) {
 	result := make([]models.IPAddress, 0)
 	params := ipam.NewIpamIPAddressesListParams()
 
-	limit := int64(2)
+	limit := int64(50)
 	params.Limit = &limit
 	params.SetContext(context.Background())
 	for {
