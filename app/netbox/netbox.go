@@ -79,16 +79,7 @@ func CreateIPAddress(c *client.NetBoxAPI, ip models.IPAddress) {
 	_ , er := c.Ipam.IpamIPAddressesCreate(parameters, nil)
 	//If address already exist, try to update Description field
 	if er != nil {
-		updateParams := &models.WritableIPAddress{}
-		updateParams.Description = "cat"
-		updateParams.Address = address
-		updateParams.Vrf = &vrfid
-
-		resource := ipam.NewIpamIPAddressesUpdateParams().WithData(updateParams)
-		_, err := c.Ipam.IpamIPAddressesUpdate(resource, nil)
-		if err !=nil {
-			fmt.Println(err)
-		}
+		fmt.Println(*address, " address already exist in vrf", vrfname)
 	}
 
 }
